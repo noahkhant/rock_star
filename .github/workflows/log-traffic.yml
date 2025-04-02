@@ -1,0 +1,29 @@
+name: Log GitHub Traffic
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  log-traffic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Get Traffic Data
+        run: |
+          echo "Fetching GitHub traffic data..."
+          curl -s -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/traffic/views \
+          > traffic.json
+
+      - name: Commit & Push Traffic Data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add traffic.json
+          git commit -m "Updated traffic data" || echo "No changes to commit"
+          git push
