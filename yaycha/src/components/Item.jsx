@@ -16,7 +16,7 @@ import { green } from "@mui/material/colors";
 
 const Item = ({item, remove}) => {
     return (
-      <Card x={{ mb: 2 }}>
+      <Card sx={{ mb: 2 }}>
         <CardContent>
           <Box
             sx={{
@@ -47,7 +47,13 @@ const Item = ({item, remove}) => {
 
           <Typography sx={{ my: 3 }}>{item.content}</Typography>
             
-          <Box>
+          <Box 
+            sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 1,
+            }}>
               <UserIcon
                 fontSize="12"
                 color="info"

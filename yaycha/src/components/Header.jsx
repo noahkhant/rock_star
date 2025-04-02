@@ -10,18 +10,23 @@ import {
 } from "@mui/icons-material";
 
 const Header = () => {
-  const { showForm, setShowForm, mode, setMode } = useApp();
+  const { showDrawer, setShowDrawer, showForm, setShowForm, mode, setMode } = useApp();
 
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton color="inherit" edge="start">
+        <IconButton color="inherit" edge="start" onClick={() => setShowDrawer(!showDrawer)}>
           <MenuIcon />
         </IconButton>
 
         <Typography sx={{ flexGrow: 1, ml: 2 }}>Yaycha</Typography>
 
         <Box>
+        <IconButton
+          color="inherit"
+          onClick={() => setShowForm(!showForm)}>
+          <AddIcon />
+        </IconButton>
           {mode === "dark" ? (
             <IconButton
               color="inherit"

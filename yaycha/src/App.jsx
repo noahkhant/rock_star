@@ -10,7 +10,7 @@ import { useApp } from "./ThemedApp";
 
 const App = () => {
 
-  const {showForm} = useApp();
+  const {showForm, setGlobalMsg} = useApp();
   
   const [data, setData] = useState([
     { id: 3, content: "Yay, interesting.", name: "Chris" },
@@ -20,11 +20,13 @@ const App = () => {
 
   const remove = (id) => {
     setData(data.filter((item) => item.id !== id));
+    setGlobalMsg("An item is deleted");
   };
 
   const add = (content, name) => {
     const id = data[0].id + 1;
     setData([{ id, content, name }, ...data]);
+    setGlobalMsg("An item is added");
   };
 
   return (
@@ -34,7 +36,7 @@ const App = () => {
 
       <Container
         maxWidth="sm"
-        sx={{ mt: 4 }}>
+        sx={{ mt: 4}}>
         {showForm && <Form add={add} />}
 
         {data.map(item => {
