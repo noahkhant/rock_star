@@ -14,6 +14,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Comments from "./pages/Comments";
+import Likes from "./pages/Likes";
 
 const AppContext = createContext();
 
@@ -39,8 +41,16 @@ const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "/profile",
+        path: "/profile/:id",
         element: <Profile />,
+      },
+      {
+        path: "/comments/:id",
+        element: <Comments />,
+      },
+      {
+        path: "/likes/:id",
+        element: <Likes />,
       },
     ],
   },

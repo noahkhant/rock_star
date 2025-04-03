@@ -21,9 +21,12 @@ import {
 
 import { deepPurple } from "@mui/material/colors";
 
+import { useNavigate } from "react-router-dom";
+
 import { useApp } from "../ThemedApp";
 
 const AppDrawer = () => {
+  const navigate = useNavigate();
   const { showDrawer, setShowDrawer, auth, setAuth } = useApp();
 
   return (
@@ -61,7 +64,7 @@ const AppDrawer = () => {
 
         <List>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate("/")}>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
@@ -74,7 +77,7 @@ const AppDrawer = () => {
           {auth && (
             <>
               <ListItem>
-                <ListItemButton>
+                <ListItemButton onClick={() => navigate("/profile/1")}>
                   <ListItemIcon>
                     <ProfileIcon />
                   </ListItemIcon>
@@ -96,7 +99,7 @@ const AppDrawer = () => {
           {!auth && (
             <>
               <ListItem>
-                <ListItemButton>
+                <ListItemButton onClick={() => navigate("/register")}>
                   <ListItemIcon>
                     <RegisterIcon />
                   </ListItemIcon>
@@ -105,7 +108,7 @@ const AppDrawer = () => {
               </ListItem>
 
               <ListItem>
-                <ListItemButton onClick={() => setAuth(true)}>
+                <ListItemButton onClick={() => navigate("/login")}>
                   <ListItemIcon>
                     <LoginIcon />
                   </ListItemIcon>

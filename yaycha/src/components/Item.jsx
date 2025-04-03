@@ -3,7 +3,8 @@ import {
   Card,
   CardContent,
   Typography,
-  IconButton
+  IconButton,
+  CardMedia
 } from "@mui/material";
 
 import {
@@ -14,10 +15,14 @@ import {
 
 import { green } from "@mui/material/colors";
 
-const Item = ({item, remove}) => {
+import { useNavigate } from "react-router-dom";
+
+const Item = ({item, remove, primary}) => {
+    const navigate = useNavigate();
     return (
       <Card sx={{ mb: 2 }}>
-        <CardContent>
+        {primary && <Box sx={{ height:50, bgcolor: green[500] }}/>}
+        <CardContent onClick={() => navigate("/comments/1")}>
           <Box
             sx={{
               display: "flex",
@@ -39,9 +44,13 @@ const Item = ({item, remove}) => {
               </Typography>
             </Box>
             <IconButton
+              sx={{ color: "text.fade" }}
               size="small"
-              onClick={() => remove(item.id)}>
-              <DeleteIcon fontSize="inherit" />
+              onClick={e => {
+                e.stopPropagation();
+                remove(item.id); 
+              }}>
+              <DeleteIcon color="inherit" fontSize="inherit" />
             </IconButton>
           </Box>
 

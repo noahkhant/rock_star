@@ -24,7 +24,7 @@ const Profile = () => {
                 <Box sx={{ textAlign: "center" }}>
                     <Typography>Noah</Typography>
                     <Typography sx={{ fontSize: "0 0.8em", color: "text.fade" }}>
-                        Noah's profile btio content here
+                        Noah's profile bio content here
                     </Typography>
                 </Box>
             </Box>

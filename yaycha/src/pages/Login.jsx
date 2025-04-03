@@ -22,7 +22,7 @@ const Login = () => {
             <form onSubmit={e => {
                 e.preventDefault();
                 setAuth(true);
-                navigate("/profile");
+                navigate("/profile/1");
             }}>
                 <Box
                     sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 2 }}>
