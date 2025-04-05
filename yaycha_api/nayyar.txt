@@ -1,0 +1,9 @@
+page is 
+
+npm init -y
+npm i prisma @faker-js/faker bcrypt
+npx prisma init --datasource-provider sqlit
+
+pick latest with git
+
+npx prisma migrate dev --name=init
