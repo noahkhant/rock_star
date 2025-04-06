@@ -1,4 +1,4 @@
-page is 
+page is 180
 
 npm init -y
 npm i prisma @faker-js/faker bcrypt
