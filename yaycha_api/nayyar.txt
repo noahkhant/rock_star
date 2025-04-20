@@ -1,3 +1,6 @@
-page is 195
+page is 201
 
 npm i express cors nodemon
+
+npm i --save-dev prisma@latest
+npm i @prisma/client@latest
