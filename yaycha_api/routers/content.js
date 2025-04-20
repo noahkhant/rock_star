@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const prisma = require("../prismaClient");
 
-router.get("/posts/:id", async (req, res) => {
+router.get("/posts", async (req, res) => {
   const { id } = req.params;
   try {
     const data = await prisma.post.findMany({
-      where: {
-        id: Number(id),
-      },
+      // where: {
+      //   id: Number(id),
+      // },
       include: {
         user: true,
         comments: {
