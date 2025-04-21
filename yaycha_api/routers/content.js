@@ -6,9 +6,6 @@ router.get("/posts", async (req, res) => {
   const { id } = req.params;
   try {
     const data = await prisma.post.findMany({
-      // where: {
-      //   id: Number(id),
-      // },
       include: {
         user: true,
         comments: {
@@ -18,7 +15,9 @@ router.get("/posts", async (req, res) => {
         },
       },
     });
-    res.json(data);
+    setTimeout(() => {
+      res.json(data);
+    }, 2000);
   } catch (e) {
     res.status(500).json({ error: e });
   }
