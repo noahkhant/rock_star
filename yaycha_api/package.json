@@ -15,7 +15,8 @@
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "react-query": "^3.39.3"
   },
   "prisma": {
     "seed": "node prisma/seeds/main"

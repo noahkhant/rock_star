@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
-
-import { Box } from "@mui/material";
+import { Alert, Box } from "@mui/material";
 
 import Form from "../components/Form";
 import Item from "../components/Item";
 
 import { useApp } from "../ThemedApp";
+import { useQuery } from "@tanstack/react-query";
+
+const api = import.meta.env.VITE_API;
 
 const Home = () => {
-  const { showForm, setShowForm } = useApp();
+  const { showForm, setGlobalMsg } = useApp();
 
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const api = import.meta.env.VITE_API;
-    fetch(`${api}/content/posts`).then(async (res) => {
-      setData(await res.json());
-    });
-  }, []);
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const res = await fetch(`${api}/content/posts`);
+      return res.json();
+    },
+  });
 
   const remove = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -30,6 +30,17 @@ const Home = () => {
     setGlobalMsg("An item is added");
   };
 
+  if (isError) {
+    return (
+      <Box>
+        <Alert severity="warning">Can't fetch data</Alert>
+      </Box>
+    );
+  }
+
+  if (isLoading) {
+    return <Box sx={{ textAlign: "center" }}>Loading...</Box>;
+  }
   return (
     <Box>
       {showForm && <Form add={add} />}
