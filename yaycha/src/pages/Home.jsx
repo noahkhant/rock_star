@@ -27,11 +27,11 @@ const Home = () => {
         method: "DELETE",
       });
     },
-
     onMutate: (id) => {
-      queryClient.cancelQueries("posts");
-      queryClient.setQueryData("posts", (old) => {
-        old.filter((item) => item.id != id);
+      queryClient.cancelQueries({ queryKey: ["posts"] });
+      queryClient.setQueryData(["posts"], (old) => {
+        old.filter((post) => post.id != id);
+        console.log();
       });
       setGlobalMsg("A post Deleted!");
     },
@@ -58,8 +58,8 @@ const Home = () => {
     <Box>
       {showForm && <Form add={add} />}
 
-      {data.map((item) => {
-        return <Item key={item.id} item={item} remove={remove} />;
+      {data?.map((item) => {
+        return <Item key={item.id} item={item} remove={remove.mutate} />;
       })}
     </Box>
   );
