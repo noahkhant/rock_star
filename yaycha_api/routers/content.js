@@ -23,6 +23,26 @@ router.get("/posts", async (req, res) => {
   }
 });
 
+router.get("/posts/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: Number(id) },
+      include: {
+        user: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+    post ? res.json(post) : res.status(404).json({ error: "Post not found" });
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
 router.delete("/posts/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -44,7 +64,7 @@ router.delete("/posts/:id", async (req, res) => {
 router.delete("/comments/:id", async (req, res) => {
   const { id } = req.params;
 
-  await prisma.comment.delete({
+  await prisma.comment.findMany({
     where: { id: Number(id) },
   });
 
