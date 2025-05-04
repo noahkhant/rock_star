@@ -30,8 +30,7 @@ const Home = () => {
     onMutate: (id) => {
       queryClient.cancelQueries({ queryKey: ["posts"] });
       queryClient.setQueryData(["posts"], (old) => {
-        old.filter((post) => post.id != id);
-        console.log();
+        old.filter((item) => item.id != id);
       });
       setGlobalMsg("A post Deleted!");
     },

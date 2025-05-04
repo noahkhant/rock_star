@@ -15,7 +15,7 @@ const Comments = () => {
   const { setGlobalMsg } = useApp();
 
   const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["comments"],
+    queryKey: ["comments", id],
     queryFn: async () => {
       const res = await fetch(`${api}/content/posts/${id}`);
       return res.json();
@@ -38,7 +38,7 @@ const Comments = () => {
         method: "DELETE",
       });
     },
-    onMutate: (id) => {
+    onMutate: async (id) => {
       queryClient.cancelQueries({ queryKey: ["comments"] });
       queryClient.setQueryData(["comments"], (old) => {
         old.comments = old.comments.filter((comment) => comment.id !== id);
