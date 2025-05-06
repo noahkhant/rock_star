@@ -2,10 +2,9 @@ import { useState, createContext, useContext, useMemo } from "react";
 
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
-import {
-  createBrowserRouter,
-  RouterProvider
-} from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { deepPurple, grey } from "@mui/material/colors";
 
@@ -19,6 +18,8 @@ import Likes from "./pages/Likes";
 
 const AppContext = createContext();
 
+export const queryClient = new QueryClient();
+
 export const useApp = () => {
   return useContext(AppContext);
 };
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-      }, 
+      },
       {
         path: "/login",
         element: <Login />,
@@ -78,15 +79,22 @@ const ThemedApp = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppContext.Provider 
-        value={{ 
-          showDrawer, setShowDrawer,
-          showForm, setShowForm, 
-          globalMsg, setGlobalMsg,
-          auth, setAuth,
-          mode, setMode }}>
-        
-        <RouterProvider router={router} />
+      <AppContext.Provider
+        value={{
+          showDrawer,
+          setShowDrawer,
+          showForm,
+          setShowForm,
+          globalMsg,
+          setGlobalMsg,
+          auth,
+          setAuth,
+          mode,
+          setMode,
+        }}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
         <CssBaseline />
       </AppContext.Provider>
     </ThemeProvider>

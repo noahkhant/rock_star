@@ -1,43 +1,55 @@
-import {useState} from "react";
-
-import { Box } from "@mui/material";
+import { Alert, Box } from "@mui/material";
 
 import Form from "../components/Form";
 import Item from "../components/Item";
 
 import { useApp } from "../ThemedApp";
+import { useQuery } from "@tanstack/react-query";
+
+const api = import.meta.env.VITE_API;
 
 const Home = () => {
-    const { showForm, setShowForm } = useApp();
+  const { showForm, setGlobalMsg } = useApp();
 
-    const [data, setData] = useState([
-        { id: 3, content: "Yay, interesting.", name: "Chris" },
-        { id: 2, content: "React is fun.", name: "Bob" },
-        { id: 1, content: "Hello, World!", name: "Alice" },
-      ]);
-    
-    const remove = (id) => {
-        setData(data.filter((item) => item.id !== id));
-        setGlobalMsg("An item is deleted");
-    };
-    
-    const add = (content, name) => {
-        const id = data[0].id + 1;
-        setData([{ id, content, name }, ...data]);
-        setGlobalMsg("An item is added");
-    };
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const res = await fetch(`${api}/content/posts`);
+      return res.json();
+    },
+  });
 
+  const remove = (id) => {
+    setData(data.filter((item) => item.id !== id));
+    setGlobalMsg("An item is deleted");
+  };
+
+  const add = (content, name) => {
+    const id = data[0].id + 1;
+    setData([{ id, content, name }, ...data]);
+    setGlobalMsg("An item is added");
+  };
+
+  if (isError) {
     return (
-        <Box>
-            {showForm && <Form add={add}/>}
+      <Box>
+        <Alert severity="warning">Can't fetch data</Alert>
+      </Box>
+    );
+  }
 
-            {data.map(item => {
-                return(
-                    <Item key={item.id} item={item} remove={remove}/>
-                );
-            })}
-        </Box>
-    )
+  if (isLoading) {
+    return <Box sx={{ textAlign: "center" }}>Loading...</Box>;
+  }
+  return (
+    <Box>
+      {showForm && <Form add={add} />}
+
+      {data.map((item) => {
+        return <Item key={item.id} item={item} remove={remove} />;
+      })}
+    </Box>
+  );
 };
 
 export default Home;
