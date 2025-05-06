@@ -4,7 +4,9 @@ import Form from "../components/Form";
 import Item from "../components/Item";
 
 import { useApp } from "../ThemedApp";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+
+import { queryClient } from "../ThemedApp";
 
 const api = import.meta.env.VITE_API;
 
@@ -19,10 +21,20 @@ const Home = () => {
     },
   });
 
-  const remove = (id) => {
-    setData(data.filter((item) => item.id !== id));
-    setGlobalMsg("An item is deleted");
-  };
+  const remove = useMutation({
+    mutationFn: async (id) => {
+      await fetch(`${api}/content/posts/${id}`, {
+        method: "DELETE",
+      });
+    },
+    onMutate: (id) => {
+      queryClient.cancelQueries({ queryKey: ["posts"] });
+      queryClient.setQueryData(["posts"], (old) => {
+        old.filter((item) => item.id != id);
+      });
+      setGlobalMsg("A post Deleted!");
+    },
+  });
 
   const add = (content, name) => {
     const id = data[0].id + 1;
@@ -45,8 +57,8 @@ const Home = () => {
     <Box>
       {showForm && <Form add={add} />}
 
-      {data.map((item) => {
-        return <Item key={item.id} item={item} remove={remove} />;
+      {data?.map((item) => {
+        return <Item key={item.id} item={item} remove={remove.mutate} />;
       })}
     </Box>
   );
