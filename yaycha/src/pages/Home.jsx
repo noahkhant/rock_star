@@ -33,7 +33,7 @@ const Home = () => {
   if (isError) {
     return (
       <Box>
-        <Alert severity="warning">Can't fetch data</Alert>
+        <Alert severity="warning">{error.message}</Alert>
       </Box>
     );
   }

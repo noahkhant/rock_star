@@ -1,13 +1,3 @@
 page is 215
 
-/*This is at first*/
-npm i express cors nodemon
-
-/*This is at 2025/04/20*/
-npm i --save-dev prisma@latest
-npm i @prisma/client@latest
-
-npm i date-fns
-
 /*This is at 2025/04/22*/
-npm i react-query
