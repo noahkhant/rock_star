@@ -1,6 +1,15 @@
-import { registerRootComponent } from 'expo';
-import App from './_layout';
+import { Text, View } from "react-native";
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures your app is correctly initialized whether you load it in Expo Go or a native build.
-registerRootComponent(App);
+export default function Index() {
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text>Edit app/index.tsx to edit this screen.</Text>
+    </View>
+  );
+}
