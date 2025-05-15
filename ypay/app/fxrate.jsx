@@ -9,9 +9,12 @@ const FxRate = () => {
 
   const api = "https://api.frankfurter.app/latest?from=USD";
 
-  const { isLoading, isError, error, data } = useQuery("fxrate", async () => {
-    const res = await fetch(api);
-    return res.json();
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["fxrate"],
+    queryFn: async () => {
+      const res = await fetch(api);
+      return res.json();
+    },
   });
 
   if (isLoading) {

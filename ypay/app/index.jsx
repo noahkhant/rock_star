@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={(["rgba(0,0,0,0.8)"], "transparent")}
+        colors={["rgba(0,0,0,0.8)", "transparent"]}
         style={styles.background}
       />
 
