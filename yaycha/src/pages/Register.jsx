@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
 import { postUser } from "../libs/fetcher";
-import { useAsyncError, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "../ThemedApp";
 
 const Register = () => {
@@ -29,21 +29,20 @@ const Register = () => {
       setError("name, username and password required");
       return false;
     }
-
     create.mutate({ name, username, bio, password });
   };
 
-  const create = useMutation(async (data) => {
-    postUser(data),
-      {
-        onError: async () => {
-          setError("Can't create user");
-        },
-        onSuccess: async () => {
-          setGlobalMsg("Account created successfully");
-          navigate("/login");
-        },
-      };
+  const create = useMutation({
+    mutationFn: async (data) => {
+      return postUser(data);
+    },
+    onError: async () => {
+      setError("Can't create user");
+    },
+    onSuccess: async (user) => {
+      setGlobalMsg("Account Created");
+      navigate("/login");
+    },
   });
 
   return (
@@ -60,15 +59,22 @@ const Register = () => {
           handleSubmit();
         }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 2 }}>
-          <TextField inputRef={name} placeholder="Name" fullWidth />
-          <TextField inputRef={username} placeholder="Username" fullWidth />
-          <TextField inputRef={bio} placeholder="Bio" fullWidth />
-          <TextField inputRef={password} placeholder="Password" fullWidth />
+          <TextField inputRef={nameInput} placeholder="Name" fullWidth />
+          <TextField
+            inputRef={usernameInput}
+            placeholder="Username"
+            fullWidth
+          />
+          <TextField inputRef={bioInput} placeholder="Bio" fullWidth />
+          <TextField
+            inputRef={passwordInput}
+            placeholder="Password"
+            fullWidth
+          />
+          <Button variant="contained" type="submit" fullWidth>
+            Register
+          </Button>
         </Box>
-
-        <Button variant="contained" type="contained" fullWidth>
-          Register
-        </Button>
       </form>
     </Box>
   );
