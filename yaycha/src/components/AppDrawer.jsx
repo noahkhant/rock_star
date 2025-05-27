@@ -58,7 +58,9 @@ const AppDrawer = () => {
                 background: deepPurple[500],
               }}
             />
-            <Typography sx={{ fontWeight: "bold" }}>Noah</Typography>
+            <Typography sx={{ fontWeight: "bold" }}>
+              {auth ? auth.name : "Guest"}
+            </Typography>
           </Box>
         </Box>
 
@@ -77,7 +79,7 @@ const AppDrawer = () => {
           {auth && (
             <>
               <ListItem>
-                <ListItemButton onClick={() => navigate("/profile/1")}>
+                <ListItemButton onClick={() => navigate(`/profile/${auth.id}`)}>
                   <ListItemIcon>
                     <ProfileIcon />
                   </ListItemIcon>
@@ -86,7 +88,12 @@ const AppDrawer = () => {
               </ListItem>
 
               <ListItem>
-                <ListItemButton onClick={() => setAuth(null)}>
+                <ListItemButton
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    setAuth(null);
+                    navigate("/login");
+                  }}>
                   <ListItemIcon>
                     <LogoutIcon color="error" />
                   </ListItemIcon>
