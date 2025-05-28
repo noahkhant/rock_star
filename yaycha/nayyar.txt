@@ -1,4 +1,4 @@
-Page is 291.
+Page is 292.
 
 npm i prisma
 npx prisma init --datasource-provider sqlite
