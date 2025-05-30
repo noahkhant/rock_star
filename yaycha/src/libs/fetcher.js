@@ -37,5 +37,13 @@ export async function fetchUser(id) {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  return res;
+  if (!res.ok) {
+    throw new Error("Failed to fetch user");
+  }
+
+  return res.json();
+}
+
+function getToken() {
+  return localStorage.getItem("token");
 }
