@@ -1,6 +1,1 @@
 Page is 294.
-
-npm i prisma
-npx prisma init --datasource-provider sqlite
-npx prisma migrate dev --name=init
-npx prisma studio
