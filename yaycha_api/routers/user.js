@@ -31,6 +31,11 @@ router.get("/users/:id", async (req, res) => {
   res.json(data);
 });
 
+router.get("/verify", auth, async (req, res) => {
+  const user = res.locals.user;
+  res.json(user);
+});
+
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 

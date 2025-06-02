@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const prisma = require("../prismaClient");
 
 /***
  * @param {express.Request} req
@@ -25,4 +26,39 @@ const auth = (req, res, next) => {
   next();
 };
 
-module.exports = { auth };
+const isOwner = (type) => {
+  /***
+   * @param {express.Request} req
+   * @param {express.Response} res
+   * @param {express.NextFunction} next
+   */
+
+  return async (req, res, next) => {
+    const { id } = req.params;
+    const user = res.locals.user;
+
+    if (type == "post") {
+      const post = await prisma.post.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (post.userId == user.id) return next();
+    }
+
+    if (type == "comment") {
+      const comment = await prisma.comment.findUnique({
+        where: { id: Number(id) },
+        include: {
+          post: true,
+        },
+      });
+
+      if (comment.userId == user.id || comment.post.userId == user.id)
+        return next();
+    }
+
+    res.status(403).json({ msg: "Unauthorize to delete" });
+  };
+};
+
+module.exports = { auth, isOwner };
