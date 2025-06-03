@@ -47,3 +47,18 @@ export async function fetchUser(id) {
 function getToken() {
   return localStorage.getItem("token");
 }
+
+export async function fetchVerify() {
+  const token = getToken();
+  const res = await fetch(`${api}/verify`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.ok) {
+    return res.json();
+  }
+
+  return false;
+}

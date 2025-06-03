@@ -16,7 +16,7 @@ const auth = (req, res, next) => {
     return res.status(400).json({ msg: "token required" });
   }
 
-  const user = jwt.encode(token, process.env.JWT_SECRET);
+  const user = jwt.decode(token, process.env.JWT_SECRET);
   if (!user) {
     return res.status(401).json({ msg: "incorrect token" });
   }

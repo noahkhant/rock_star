@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useMemo } from "react";
+import { useState, createContext, useContext, useMemo, useEffect } from "react";
 
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { deepPurple, grey } from "@mui/material/colors";
+
+import { fetchVerify } from "./libs/fetcher";
 
 import Template from "./Template";
 import Home from "./pages/Home";
@@ -63,6 +65,12 @@ const ThemedApp = () => {
   const [globalMsg, setGlobalMsg] = useState(null);
   const [auth, setAuth] = useState(null);
   const [mode, setMode] = useState("dark");
+
+  useEffect(() => {
+    fetchVerify().then((user) => {
+      if (user) setAuth(user);
+    });
+  }, []);
 
   const theme = useMemo(() => {
     return createTheme({
