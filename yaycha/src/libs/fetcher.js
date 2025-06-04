@@ -1,3 +1,5 @@
+import { ContactEmergency } from "@mui/icons-material";
+
 const api = import.meta.env.VITE_API;
 
 export async function postUser(data) {
@@ -61,4 +63,42 @@ export async function fetchVerify() {
   }
 
   return false;
+}
+
+export async function postPost(content) {
+  const token = getToken();
+
+  const res = await fetch(`${api}/content/posts`, {
+    method: "POST",
+    body: JSON.stringify({ content }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.ok) {
+    return res.json();
+  }
+
+  throw new Error("Error: Check Network Log");
+}
+
+export async function postComment(content, postId) {
+  const token = getToken();
+
+  const res = await fetch(`${api}/content/comments`, {
+    method: "POST",
+    body: JSON.stringify({ content, postId }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.ok) {
+    return res.json();
+  }
+
+  throw new Error("Error: Check Network Log");
 }

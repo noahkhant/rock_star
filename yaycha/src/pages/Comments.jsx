@@ -5,12 +5,16 @@ import Item from "../components/Item";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, useApp } from "../ThemedApp";
+import { postComment } from "../libs/fetcher";
+import { useRef } from "react";
 
 const api = import.meta.env.VITE_API;
 
 const Comments = () => {
+  const { auth } = useApp();
   const { id } = useParams();
   const navigate = useNavigate();
+  const contentInput = useRef();
 
   const { setGlobalMsg } = useApp();
 
@@ -19,6 +23,20 @@ const Comments = () => {
     queryFn: async () => {
       const res = await fetch(`${api}/content/posts/${id}`);
       return res.json();
+    },
+  });
+
+  const addComment = useMutation({
+    mutationFn: (content) => {
+      postComment(content, id);
+    },
+    onSuccess: async (comment) => {
+      await queryClient.cancelQueries("comments");
+      await queryClient.setQueryData("comments", (old) => {
+        old.comments = [...old.comments, comment];
+        return { ...old };
+      });
+      setGlobalMsg("A comment added");
     },
   });
 
@@ -74,20 +92,34 @@ const Comments = () => {
         );
       })}
 
-      <form>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-            mt: 3,
+      {auth && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const content = contentInput.current.value;
+            if (!content) return false;
+
+            addComment.mutate(content);
+            e.currentTarget.reset();
           }}>
-          <TextField multiline placeholder="Your Comment" />
-          <Button type="submit" variant="contained">
-            Reply
-          </Button>
-        </Box>
-      </form>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+              mt: 3,
+            }}>
+            <TextField
+              multiline
+              placeholder="Your Comment"
+              inputRef={contentInput}
+            />
+            <Button type="submit" variant="contained">
+              Reply
+            </Button>
+          </Box>
+        </form>
+      )}
     </Box>
   );
 };

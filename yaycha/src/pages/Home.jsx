@@ -11,7 +11,7 @@ import { queryClient } from "../ThemedApp";
 const api = import.meta.env.VITE_API;
 
 const Home = () => {
-  const { showForm, setGlobalMsg } = useApp();
+  const { auth, showForm, setGlobalMsg } = useApp();
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["posts"],
@@ -36,11 +36,14 @@ const Home = () => {
     },
   });
 
-  const add = (content, name) => {
-    const id = data[0].id + 1;
-    setData([{ id, content, name }, ...data]);
-    setGlobalMsg("An item is added");
-  };
+  const add = useMutation({
+    mutationFn: async (content) => postPost(content),
+    onSuccess: async (post) => {
+      await queryClient.cancelQueries("posts");
+      await queryClient.setQueryData("posts", (old) => [post, ...old]);
+      setGlobalMsg("A post added");
+    },
+  });
 
   if (isError) {
     return (
@@ -55,7 +58,7 @@ const Home = () => {
   }
   return (
     <Box>
-      {showForm && <Form add={add} />}
+      {showForm && auth && <Form add={add} />}
 
       {data?.map((item) => {
         return <Item key={item.id} item={item} remove={remove.mutate} />;
